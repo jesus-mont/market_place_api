@@ -1,9 +1,18 @@
+require 'pry'
 class UsersController < ApplicationController
-  def show
-    @user = User.find(params[:id])
+  
 
-    render json: @user.to_json
+  def show
+    # binding.pry
+    begin
+      @user = User.find(params[:id]) 
+      rescue ActiveRecord::RecordNotFound => e
+        return render json: "#{Rails.root}/public/404", status: :not_found
+      raise
+    end 
+    render json: @user.to_json       
   end
+
 
   # def create
   #     user = User.new(user_params)

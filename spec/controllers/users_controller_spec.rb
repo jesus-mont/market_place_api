@@ -8,9 +8,10 @@ describe UsersController do
     let!(:user) { FactoryBot.create(:user) }
     let(:user_id) { user.id }
 
-    before { get :show, params: { id: user.id } }
+    # before { get :show, params: { id: user.id } }
 
     context 'when the response is successful' do
+      before { get :show, params: { id: user_id } }
       it 'returns the information about a reporter on a hash' do
         expect(JSON.parse(response.body)['email']).to eq(user.email)
       end
@@ -22,7 +23,7 @@ describe UsersController do
 
     context 'when the user does not exists' do
       let(:user_id) { 100 }
-
+      before { get :show, params: { id: user_id } }
       it 'returns status not_found' do
         expect(response).to have_http_status(404)
       end
