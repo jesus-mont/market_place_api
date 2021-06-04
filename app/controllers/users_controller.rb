@@ -1,16 +1,14 @@
-require 'pry'
-class UsersController < ApplicationController
-  
+class UsersController < ActionController::Base
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   def show
-    # binding.pry
-    begin
-      @user = User.find(params[:id]) 
-      rescue ActiveRecord::RecordNotFound => e
-        return render json: "#{Rails.root}/public/404", status: :not_found
-      raise
-    end 
-    render json: @user.to_json       
+    @user = User.find(params[:id])
+    render json: @user.to_json
+  end
+
+  private
+  def record_not_found
+    render json: "Record Not Found", status: :not_found
   end
 
 
