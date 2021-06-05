@@ -69,4 +69,71 @@ describe UsersController do
       end
     end
   end
+
+  describe "PUT/PATCH #update" do
+  let!(:user) { FactoryBot.create(:user) }
+    context "when is successfully updated" do
+     
+      before { patch :update, params:{ id: user.id,
+                        user:{ email: "newmail@example.com" } } }
+
+      it "renders the json representation for the updated user" do
+        user_response = JSON.parse(response.body, symbolize_names: true)
+        expect(user_response[:email]).to eql "newmail@example.com"
+      end
+
+      it "return successful code" do
+        expect(response).to have_http_status(200)
+      end 
+    end
+
+    context 'when the user does not exists' do
+      let(:user_id) { 100 }
+      before { patch :update, params:{ id: user_id,
+                        user:{ email: "newmail@example.com" } } }
+      it 'returns status not_found' do
+        expect(response).to have_http_status(404)
+      end
+    end
+
+    context "when is bad request" do
+      let!(:user) { FactoryBot.create(:user) }
+
+      before { patch :update, params:{ id: user.id,
+                         user: { email: "bademail.com" } } }
+
+
+      it "renders an errors json" do
+        user_response = JSON.parse(response.body, symbolize_names: true)
+        expect(user_response).to have_key(:errors)
+      end
+
+      it "renders the json errors on whye the user could not be created" do
+        user_response = JSON.parse(response.body, symbolize_names: true)
+        expect(user_response[:errors][:email]).to include "is invalid"
+      end
+
+      it "return 422" do
+        expect(response).to have_http_status(422)
+      end
+    end
+  end
+
+  describe "DELETE #destroy" do
+    let!(:user) { FactoryBot.create(:user) }
+    context 'when destroy sucessful' do
+      before { delete :destroy, params: { id: user.id } }
+      it "return 204" do
+        expect(response).to have_http_status(204)
+      end
+    end 
+
+    context 'when the user does not exists' do
+      let(:user_id) { 100 }
+      before { delete :destroy, params: { id: user_id } }
+      it 'returns status not_found' do
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
 end
