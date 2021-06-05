@@ -6,18 +6,25 @@ class UsersController < ActionController::Base
     render json: @user.to_json
   end
 
+  def create
+    user = User.new(user_params)
+    binding.pry 
+    if user.save
+      render json: user, status: 201
+    else 
+      render json: { errors: user.errors }, status: 422
+    end    
+  end
+
+
   private
   def record_not_found
     render json: "Record Not Found", status: :not_found
   end
 
+  def user_params
+    params.require(:user).permit(:email, :password, :password_confirmation, :name, :phone)
+  end
 
-  # def create
-  #     user = User.new(user_params)
-  #     if user.save
-  #     render json: user, status: 201, location: [:api, user]
-  #     else
-  #     render json: { errors: user.errors }, status: 422
-  #     end
-  # end
+  
 end
