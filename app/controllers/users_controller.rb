@@ -1,8 +1,8 @@
 class UsersController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def show
-    @user = User.find(params[:id])
     render json: @user.to_json
   end
 
@@ -16,21 +16,17 @@ class UsersController < ActionController::Base
   end
 
   def update
-    user = User.find(params[:id])
-
-    if user.update(user_params)
-      render json: user, status: 200
+    if @user.update(user_params)
+      render json: @user, status: 200
     else
-      render json: { errors: user.errors }, status: 422
+      render json: { errors: @user.errors }, status: 422
     end
   end  
 
   def destroy
-    user = User.find(params[:id])
-    user.destroy
+    @user.destroy
     head 204
   end  
-
 
   private
   def record_not_found
@@ -41,5 +37,7 @@ class UsersController < ActionController::Base
     params.require(:user).permit(:email, :password, :password_confirmation, :name, :phone)
   end
 
-  
+  def set_user
+    @user = User.find(params[:id])
+  end
 end
