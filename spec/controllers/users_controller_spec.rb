@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'rails_helper'
-
 describe UsersController do
   before(:each) { request.headers['Accept'] = "application/vnd.marketplace" }
 
@@ -38,7 +37,7 @@ describe UsersController do
 
 
       it "renders the json representation for the user record just created" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
+        user_response = json_response
         expect(user_response[:email]).to eql user[:email]
       end
 
@@ -55,12 +54,12 @@ describe UsersController do
     
 
       it "renders an errors json" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
+        user_response = json_response
         expect(user_response).to have_key(:errors)
       end
 
       it "renders the json errors on why the user could not be created" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
+        user_response = json_response
         expect(user_response[:errors][:email]).to include "can't be blank"
       end
 
@@ -78,7 +77,7 @@ describe UsersController do
                         user:{ email: "newmail@example.com" } } }
 
       it "renders the json representation for the updated user" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
+        user_response = json_response
         expect(user_response[:email]).to eql "newmail@example.com"
       end
 
@@ -104,12 +103,12 @@ describe UsersController do
 
 
       it "renders an errors json" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
+        user_response = json_response
         expect(user_response).to have_key(:errors)
       end
 
       it "renders the json errors on whye the user could not be created" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
+        user_response = json_response
         expect(user_response[:errors][:email]).to include "is invalid"
       end
 
@@ -136,4 +135,10 @@ describe UsersController do
       end
     end
   end
+end
+
+private 
+
+def json_response
+  @json_response ||= JSON.parse(response.body, symbolize_names: true)
 end
