@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'rails_helper'
+require 'request_helper'
 describe UsersController do
   before(:each) { request.headers['Accept'] = "application/vnd.marketplace" }
 
@@ -135,10 +136,4 @@ describe UsersController do
       end
     end
   end
-end
-
-private 
-
-def json_response
-  @json_response ||= JSON.parse(response.body, symbolize_names: true)
 end
