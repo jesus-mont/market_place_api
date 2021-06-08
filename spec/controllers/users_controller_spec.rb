@@ -5,7 +5,7 @@ describe UsersController do
   before(:each) { request.headers['Accept'] = "application/vnd.marketplace" }
 
   describe 'GET #show' do
-    let!(:user) { FactoryBot.create(:user) }
+    create_user
     let(:user_id) { user.id }
 
     # before { get :show, params: { id: user.id } }
@@ -71,7 +71,7 @@ describe UsersController do
   end
 
   describe "PUT/PATCH #update" do
-  let!(:user) { FactoryBot.create(:user) }
+    create_user
     context "when is successfully updated" do
      
       before { patch :update, params:{ id: user.id,
@@ -97,7 +97,7 @@ describe UsersController do
     end
 
     context "when is bad request" do
-      let!(:user) { FactoryBot.create(:user) }
+      create_user
 
       before { patch :update, params:{ id: user.id,
                          user: { email: "bademail.com" } } }
@@ -120,7 +120,7 @@ describe UsersController do
   end
 
   describe "DELETE #destroy" do
-    let!(:user) { FactoryBot.create(:user) }
+    create_user
     context 'when destroy sucessful' do
       before { delete :destroy, params: { id: user.id } }
       it "return 204" do
