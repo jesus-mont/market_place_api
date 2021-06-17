@@ -40,7 +40,8 @@ describe SessionsController do
 
     describe "DELETE #destroy" do
         user= FactoryBot.create :user
-        
+        # https://stackoverflow.com/questions/34787043/undefined-method-to-key-for-store-falsehash-when-using-sign-in-helper
+        # before{ sign_in @user, store: false }
         before{ sign_in user }
         before { delete :destroy, params:{id: user.auth_token} }
 
