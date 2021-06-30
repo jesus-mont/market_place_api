@@ -8,8 +8,6 @@ describe UsersController do
     create_user
     let(:user_id) { user.id }
 
-    # before { get :show, params: { id: user.id } }
-
     context 'when the response is successful' do
       before { get :show, params: { id: user_id } }
       it 'returns the information about a reporter on a hash' do
@@ -71,9 +69,14 @@ describe UsersController do
   end
 
   describe "PUT/PATCH #update" do
+    
     create_user
+    before(:each) do
+      request.headers['Authorization'] =  user.auth_token 
+    end 
+    
     context "when is successfully updated" do
-     
+      
       before { patch :update, params:{ id: user.id,
                         user:{ email: "newmail@example.com" } } }
 
