@@ -69,9 +69,14 @@ describe UsersController do
   end
 
   describe "PUT/PATCH #update" do
+    
     create_user
+    before(:each) do
+      request.headers['Authorization'] =  user.auth_token 
+    end 
+    
     context "when is successfully updated" do
-     
+      
       before { patch :update, params:{ id: user.id,
                         user:{ email: "newmail@example.com" } } }
 

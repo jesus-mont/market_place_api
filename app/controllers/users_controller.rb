@@ -1,6 +1,7 @@
 class UsersController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :update, :destroy]
+  # before_action :authenticate_with_token!, only: [:update]
 
   def show
     render json: @user.to_json
@@ -16,6 +17,7 @@ class UsersController < ActionController::Base
   end
 
   def update
+    @user = current_user
     if @user.update(user_params)
       render json: @user, status: 200
     else

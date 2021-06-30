@@ -4,4 +4,8 @@ end
 
 def create_user
   let!(:user) { FactoryBot.create(:user) }
-end  
+end
+
+def api_authorization_header(token)
+  request.headers['Authorization'] =  token
+end

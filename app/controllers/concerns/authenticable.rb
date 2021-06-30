@@ -12,7 +12,4 @@ module Authenticable
     def request
         request
     end
-    def response
-        response
-    end
 end
