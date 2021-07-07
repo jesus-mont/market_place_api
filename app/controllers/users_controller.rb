@@ -1,7 +1,7 @@
-class UsersController < ActionController::Base
+class UsersController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-  before_action :set_user, only: [:show, :update, :destroy]
-  # before_action :authenticate_with_token!, only: [:update]
+  before_action :set_user, only: [:show, :update,]
+  before_action :authenticate_with_token!, only: [:update, :destroy]
 
   def show
     render json: @user.to_json
@@ -26,7 +26,7 @@ class UsersController < ActionController::Base
   end  
 
   def destroy
-    @user.destroy
+    current_user.destroy
     head 204
   end  
 
