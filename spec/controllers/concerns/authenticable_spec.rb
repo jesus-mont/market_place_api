@@ -4,6 +4,7 @@ require 'request_helper'
 
 class Authentication
   include Authenticable
+  attr_reader :request, :response
 end
 
 describe Authenticable do
@@ -37,6 +38,30 @@ describe Authenticable do
 
     it "return 401" do
         expect(response).to have_http_status(401)
+    end
+  end
+
+  describe "#user_signed_in?" do
+    context "when there is a user on 'session'" do
+      before do
+        @user = FactoryBot.create :user
+        allow(authentication).to receive(:current_user).and_return(@user)
+      end
+
+      it "should be signed in" do
+        should be_user_signed_in
+      end
+    end
+
+    context "when there is no user on 'session'" do
+      before do
+        @user = FactoryBot.create :user
+        allow(authentication).to receive(:current_user).and_return(nil)
+      end
+
+      it "should not be signed in" do
+       should_not be_user_signed_in 
+      end
     end
   end
 end
