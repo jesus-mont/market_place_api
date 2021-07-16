@@ -3,6 +3,6 @@ FactoryBot.define do
       title { FFaker::Product.product_name }
       price { rand() * 100 }
       published {false}
-      user_id {"1"}
+      user
     end
   end
