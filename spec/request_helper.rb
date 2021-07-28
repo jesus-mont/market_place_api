@@ -9,3 +9,7 @@ end
 def api_authorization_header(token)
   request.headers['Authorization'] =  token
 end
+
+def create_product
+  let!(:product) { FactoryBot.create(:product) }
+end
